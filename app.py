@@ -1,10 +1,14 @@
 from flask import Flask, request, render_template, jsonify, session
 from flask_session import Session
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SECRET_KEY"] = "supersecretkey"
+app.config["SESSION_TYPE"] = os.getenv("SESSION_TYPE")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 Session(app)
 
 @app.route("/")
