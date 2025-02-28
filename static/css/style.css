@@ -1,49 +1,110 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    text-align: center;
+    background-color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+    background: #fff;
+    padding: 15px;
+}
+
+.navbar-nav .nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    margin-right: 15px;
+}
+
+.navbar .btn {
+    font-size: 14px;
+    padding: 8px 15px;
+}
+
+.hero {
+    margin: 4rem 0rem 5rem 0rem;
+    padding: 20px 20px;
+    background-color: white;
+}
+
+.hero .subheading {
+    font-size: 18px;
+    color: #888;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #222;
+}
+
+.hero .description {
+    font-size: 20px;
+    color: #777;
+}
+
+.hero .btn {
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 12px 30px;
+}
+
+.hero .input-group .form-control-lg {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.hero .form-control-lg {
+    font-size: 18px;
+    padding: 15px 25px;
+}
+
+.hero .btn-lg {
+    font-size: 18px;
+    margin: 0rem;
+    padding: 15px 25px;
+}
+
+.feature-card {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: 15rem;
     margin: 0;
     padding: 0;
+    /* border-radius: 1rem; */
 }
 
-.container {
-    width: 50%;
-    margin: 50px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.feature-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-h1 {
-    color: #333;
-}
-
-input {
-    width: 80%;
+.feature-card .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
     padding: 10px;
-    margin: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
+.feature-card .feature-title {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-button:hover {
-    background-color: #0056b3;
+.feature-card .btn {
+    margin-top: 5px;
 }
 
-#output {
-    margin-top: 20px;
-    text-align: left;
-    padding: 10px;
-    background: #e9ecef;
-    border-radius: 5px;
+.row.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.row.no-gutters>[class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
 }
