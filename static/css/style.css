@@ -72,7 +72,6 @@ body {
     height: 15rem;
     margin: 0;
     padding: 0;
-    /* border-radius: 1rem; */
 }
 
 .feature-card img {
@@ -107,4 +106,59 @@ body {
 .row.no-gutters>[class*='col-'] {
     padding-right: 0;
     padding-left: 0;
+}
+
+.bloom-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.bloom-effect.active {
+    opacity: 1;
+    animation: bloom 1s forwards;
+}
+
+.bloom-effect.stay {
+    opacity: 1;
+    background: var(--gradient);
+}
+
+@keyframes bloom {
+    0% {
+        clip-path: circle(0% at var(--x) var(--y));
+    }
+
+    100% {
+        clip-path: circle(150% at var(--x) var(--y));
+    }
+}
+
+.results {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.results .btn {
+    margin-bottom: 20px;
+}
+
+.d-none {
+    display: none !important;
 }

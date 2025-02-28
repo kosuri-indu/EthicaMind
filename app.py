@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, jsonify, session
 from flask_session import Session
 from dotenv import load_dotenv
 import os
+from mistral import generate_scenario_and_insights
 
 load_dotenv()
 
@@ -37,6 +38,12 @@ def analyze():
 def get_prompt():
     prompt = session.get('prompt', '')
     return jsonify({"prompt": prompt})
+
+@app.route("/insights")
+def insights():
+    prompt = session.get('prompt', '')
+    insights = generate_scenario_and_insights(prompt)
+    return render_template("insights.html", insights=insights)
 
 if __name__ == "__main__":
     app.run(debug=True)
