@@ -62,7 +62,16 @@ def debate():
 
 @app.route("/justification")
 def justification():
-    return render_template("justification.html")
+    prompt = session.get('prompt', '')
+    justification = generate_scenario_and_insights(prompt)
+
+    try:
+        justification_json = json.loads(justification)
+    except json.JSONDecodeError:
+        justification_json = {"error": "Invalid JSON response from AI"}
+
+    return render_template("justification.html", justification=justification_json)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

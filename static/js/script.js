@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
                 document.getElementById('message').innerText = 'Error saving prompt.';
             });
+
     });
 
     // Apply fade-in effect to the body

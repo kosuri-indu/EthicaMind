@@ -18,7 +18,7 @@ def generate_response(question):
             {"role": "system", "content": "You are an AI assistant specializing in ethical decision making. Your responses should be in concise JSON format."},
             {"role": "user", "content": question}
         ],
-        "max_tokens": 1000
+        "max_tokens": 100000
     }
 
     response = requests.post(url, json=payload, headers=headers)
@@ -53,11 +53,24 @@ def generate_scenario_and_insights(prompt):
        - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
        - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
 
+    5. Justification & Counterarguments:
+       - Provide a core ethical justification supporting the issue.
+       - Present at least three strong counterarguments against the issue.
+       - Use real-world examples, logical reasoning, and ethical principles.
+
+    6. **Generate a Detailed Summary**:
+       - Provide a longer, more in-depth summary (4-6 sentences).
+       - Clearly explain the dilemma, its significance, and key ethical takeaways.
+
+    7. Balanced Conclusion:
+       - Weigh both sides and provide a fair, reasoned conclusion.
+
     Example Prompt:  
     Should AI be used for grading exams?
 
     Example Response (JSON format):  
     {{
+        "summary": "AI-driven grading offers efficiency and consistency, but fairness concerns remain. While automation reduces human bias and speeds up the process, it may not account for subjectivity in assessments. Some argue that AI ensures standardized grading, but others worry about over-reliance on algorithms. Ethical considerations include fairness, accountability, and the need for human oversight. Schools implementing AI grading should establish clear guidelines and regularly audit results. A balanced approach integrating AI with human review may be the best path forward.",
         "scenario": "AI-driven exam grading.",
         "key_actors": ["Students", "Teachers", "Administrators"],
         "risks": ["Bias", "Lack of human judgment", "Privacy concerns"],
@@ -66,7 +79,16 @@ def generate_scenario_and_insights(prompt):
             "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
             "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
             "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
-        }}
+        }},
+        "justification": "AI in grading ensures faster and fairer assessments but may lack human oversight.",
+        "pros": ["Efficiency", "Standardization", "Scalability"],
+        "cons": ["Bias in training data", "Lack of subjective assessment"],
+        "counterarguments": [
+            "AI may reinforce biases in historical data.",
+            "It lacks human intuition for subjective answers.",
+            "Over-reliance may devalue teachers' roles."
+        ],
+        "conclusion": "AI can assist grading, but human oversight is necessary to ensure fairness."
     }}
 
     Prompt: 

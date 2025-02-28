@@ -14,12 +14,6 @@
             font-family: 'Arial', sans-serif;
             overflow-y: auto;
             padding: 20px;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        body.fade-in {
-            opacity: 1;
         }
 
         .container {
@@ -51,29 +45,6 @@
             color: #343a40;
         }
 
-        .display-4 {
-            font-size: 2.5rem;
-            font-weight: 300;
-        }
-
-        .lead {
-            font-size: 1.25rem;
-            font-weight: 300;
-        }
-
-        .insight-content p {
-            margin-bottom: 10px;
-        }
-
-        .insight-content ul {
-            list-style-type: disc;
-            padding-left: 20px;
-        }
-
-        .insight-content ul li {
-            margin-bottom: 5px;
-        }
-
         .back-icon {
             position: absolute;
             top: 20px;
@@ -86,25 +57,57 @@
 </head>
 
 <body>
-    <div class="back-icon" onclick="window.location.href='/'">
-        &#8592; <!-- Left arrow icon -->
-    </div>
+    <div class="back-icon" onclick="window.location.href='/'">&#8592;</div>
     <div class="container text-center">
         <h1 class="display-4">Justification</h1>
-        <p class="lead">AI crafts real-world ethical dilemmas with key actors, risks, and benefits.</p>
+        <p class="lead">AI-driven ethical analysis tailored to your query.</p>
+
+        {% if justification %}
+        <div class="section">
+            <h2>Summary</h2>
+            <p>{{ justification.summary }}</p>
+        </div>
 
         <div class="section">
-            <h2>Justification Details</h2>
-            <div class="insight-content">
-                <p><strong>Justification:</strong></p>
-                <p>Details about the justification will be displayed here.</p>
-            </div>
+            <h2>Justification</h2>
+            <p>{{ justification.justification }}</p>
         </div>
+
+        <div class="section">
+            <h2>Pros</h2>
+            <ul>
+                {% for pro in justification.pros %}
+                <li>{{ pro }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Cons</h2>
+            <ul>
+                {% for con in justification.cons %}
+                <li>{{ con }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Counterarguments</h2>
+            <ul>
+                {% for counter in justification.counterarguments %}
+                <li>{{ counter }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Conclusion</h2>
+            <p>{{ justification.conclusion }}</p>
+        </div>
+        {% else %}
+        <p>No justification available. Please submit a prompt first.</p>
+        {% endif %}
     </div>
-    <script>
-        // Apply fade-in effect to the body
-        document.body.classList.add('fade-in');
-    </script>
 </body>
 
 </html>
