@@ -52,5 +52,17 @@ def insights():
         insights_json = {"error": "Invalid JSON response from AI"}
     return render_template("insights.html", insights=insights_json)
 
+@app.route("/scenarios")
+def scenarios():
+    return render_template("scenarios.html")
+
+@app.route("/debate")
+def debate():
+    return render_template("debate.html")
+
+@app.route("/justification")
+def justification():
+    return render_template("justification.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

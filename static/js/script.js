@@ -22,9 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
             // Store the image source in local storage
             localStorage.setItem('backgroundImage', imgSrc);
 
-            // Navigate to /insights after the bloom effect
+            // Determine the target page based on the feature card index
+            let targetPage = '/insights';
+            if (index === 1) {
+                targetPage = '/scenarios';
+            } else if (index === 2) {
+                targetPage = '/debate';
+            } else if (index === 3) {
+                targetPage = '/justification';
+            }
+
+            // Navigate to the target page after the bloom effect
             setTimeout(() => {
-                window.location.href = '/insights';
+                window.location.href = targetPage;
             }, 1000);
         });
     });
