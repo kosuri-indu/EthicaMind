@@ -3,6 +3,7 @@ from flask_session import Session
 from dotenv import load_dotenv
 import os
 from mistral import generate_scenario_and_insights
+import json
 
 load_dotenv()
 
@@ -42,8 +43,14 @@ def get_prompt():
 @app.route("/insights")
 def insights():
     prompt = session.get('prompt', '')
-    insights = generate_scenario_and_insights(prompt)
-    return render_template("insights.html", insights=insights)
+    insights = generate_scenario_and_insights(prompt[5:])
+    try:
+        print(insights)
+        insights_json = json.loads(insights)
+        print(insights_json)
+    except json.JSONDecodeError:
+        insights_json = {"error": "Invalid JSON response from AI"}
+    return render_template("insights.html", insights=insights_json)
 
 if __name__ == "__main__":
     app.run(debug=True)

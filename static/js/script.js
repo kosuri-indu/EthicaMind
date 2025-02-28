@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add click event listeners to feature cards
     document.querySelectorAll('.feature-card').forEach((card, index) => {
         card.addEventListener('click', function () {
-            const gradient = this.getAttribute('data-gradient');
+            const imgSrc = this.querySelector('img').src;
             const rect = this.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
             const y = rect.top + rect.height / 2;
@@ -16,64 +16,46 @@ document.addEventListener('DOMContentLoaded', function () {
             const bloomEffect = document.getElementById('bloomEffect');
             bloomEffect.style.setProperty('--x', `${x}px`);
             bloomEffect.style.setProperty('--y', `${y}px`);
-            bloomEffect.style.setProperty('--gradient', gradient);
-            bloomEffect.style.background = gradient;
+            bloomEffect.style.backgroundImage = `url(${imgSrc})`;
             bloomEffect.classList.add('active');
 
-            // Display results after the animation
-            setTimeout(() => {
-                bloomEffect.classList.remove('active');
-                bloomEffect.classList.add('stay');
-                document.getElementById('results').classList.remove('d-none');
+            // Store the image source in local storage
+            localStorage.setItem('backgroundImage', imgSrc);
 
-                // Load the content of insights.html for the first feature card
-                if (index === 0) {
-                    fetch('/insights')
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById('resultsContent').innerHTML = data;
-                        })
-                        .catch(error => {
-                            console.error('Error loading insights:', error);
-                            document.getElementById('resultsContent').innerText = 'Error loading insights.';
-                        });
-                } else {
-                    document.getElementById('resultsContent').innerText = 'Results displayed here...';
-                }
+            // Navigate to /insights after the bloom effect
+            setTimeout(() => {
+                window.location.href = '/insights';
             }, 1000);
         });
     });
 
-    // Add click event listener to the back button
-    document.getElementById('backButton').addEventListener('click', function () {
-        document.getElementById('results').classList.add('d-none');
-        document.getElementById('bloomEffect').classList.remove('stay');
-    });
-});
+    document.getElementById('promptForm').addEventListener('submit', function (event) {
+        event.preventDefault();
 
-document.getElementById('promptForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+        const prompt = document.getElementById('promptInput').value;
+        console.log('Prompt:', prompt);
 
-    const prompt = document.getElementById('promptInput').value;
-    console.log('Prompt:', prompt);
+        localStorage.setItem('prompt', prompt);
+        console.log('Stored in local storage:', localStorage.getItem('prompt'));
 
-    localStorage.setItem('prompt', prompt);
-    console.log('Stored in local storage:', localStorage.getItem('prompt'));
-
-    fetch('/analyze', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ question: prompt })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            document.getElementById('message').innerText = 'Prompt saved successfully!';
+        fetch('/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ question: prompt })
         })
-        .catch((error) => {
-            console.error('Error:', error);
-            document.getElementById('message').innerText = 'Error saving prompt.';
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                document.getElementById('message').innerText = 'Prompt saved successfully!';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('message').innerText = 'Error saving prompt.';
+            });
+    });
+
+    // Apply fade-in effect to the body
+    document.body.classList.add('fade-in');
 });
