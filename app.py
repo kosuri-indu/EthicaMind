@@ -1,6 +1,11 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, session
+from flask_session import Session
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SECRET_KEY"] = "supersecretkey"
+Session(app)
 
 @app.route("/")
 def home():
@@ -11,7 +16,8 @@ def analyze():
     data = request.get_json()
     question = data.get("question", "")
 
-    # Static Response for Now
+    session['prompt'] = question
+
     response = {
         "scenario": f"Sample scenario for: {question}",
         "analysis": {
@@ -22,6 +28,11 @@ def analyze():
     }
     
     return jsonify(response)
+
+@app.route("/get_prompt")
+def get_prompt():
+    prompt = session.get('prompt', '')
+    return jsonify({"prompt": prompt})
 
 if __name__ == "__main__":
     app.run(debug=True)
