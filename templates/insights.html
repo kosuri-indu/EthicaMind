@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: auto;
             padding-top: 50px;
         }
@@ -35,6 +35,8 @@
             border-radius: 10px;
             background: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: #000;
+            text-align: left;
         }
 
         .btn-custom {
@@ -82,7 +84,22 @@
             cursor: pointer;
             color: #000;
         }
+
+        .score-dashboard {
+            margin-top: 20px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -98,63 +115,109 @@
             {{ insights.error }}
         </div>
         {% else %}
-        <div class="section">
-            <h2>Scenario Generation</h2>
-            <div class="insight-content">
-                <p><strong>Scenario:</strong></p>
-                <p>{{ insights.scenario }}</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="section">
+                    <h2>Scenario Generation</h2>
+                    <div class="insight-content">
+                        <p><strong>Scenario:</strong></p>
+                        <p>{{ insights.scenario }}</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Key Actors</h2>
+                    <div class="insight-content">
+                        <ul>
+                            {% for actor in insights.key_actors %}
+                            <li>{{ actor }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Risks</h2>
+                    <div class="insight-content">
+                        <ul>
+                            {% for risk in insights.risks %}
+                            <li>{{ risk }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="section">
+                    <h2>Benefits</h2>
+                    <div class="insight-content">
+                        <ul>
+                            {% for benefit in insights.benefits %}
+                            <li>{{ benefit }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Ethical Perspectives</h2>
+                    <div class="insight-content">
+                        <p><strong>Utilitarianism:</strong> {{ insights.ethical_perspectives.utilitarianism.analysis }}
+                        </p>
+                        <p><strong>Deontology:</strong> {{ insights.ethical_perspectives.deontology.analysis }}</p>
+                        <p><strong>Virtue Ethics:</strong> {{ insights.ethical_perspectives.virtue_ethics.analysis }}
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="section">
-            <h2>Key Actors</h2>
-            <div class="insight-content">
-                <ul>
-                    {% for actor in insights.key_actors %}
-                    <li>{{ actor }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Risks</h2>
-            <div class="insight-content">
-                <ul>
-                    {% for risk in insights.risks %}
-                    <li>{{ risk }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Benefits</h2>
-            <div class="insight-content">
-                <ul>
-                    {% for benefit in insights.benefits %}
-                    <li>{{ benefit }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Ethical Perspectives</h2>
-            <div class="insight-content">
-                <p><strong>Utilitarianism:</strong> {{ insights.ethical_perspectives.utilitarianism.analysis }} (Score:
-                    {{ insights.ethical_perspectives.utilitarianism.score }})</p>
-                <p><strong>Deontology:</strong> {{ insights.ethical_perspectives.deontology.analysis }} (Score: {{
-                    insights.ethical_perspectives.deontology.score }})</p>
-                <p><strong>Virtue Ethics:</strong> {{ insights.ethical_perspectives.virtue_ethics.analysis }} (Score: {{
-                    insights.ethical_perspectives.virtue_ethics.score }})</p>
-            </div>
+        <div class="score-dashboard">
+            <canvas id="scoreChart"></canvas>
         </div>
         {% endif %}
     </div>
     <script>
         // Apply fade-in effect to the body
         document.body.classList.add('fade-in');
+
+        // Bar chart for scores
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const scoreChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Utilitarianism', 'Deontology', 'Virtue Ethics'],
+                datasets: [{
+                    label: 'Scores',
+                    data: [
+                        {{ insights.ethical_perspectives.utilitarianism.score }},
+                {{ insights.ethical_perspectives.deontology.score }},
+                        {{ insights.ethical_perspectives.virtue_ethics.score }}
+                    ],
+        backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)'
+        ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+                borderWidth: 1
+                }]
+            },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                        max: 10
+                }
+            }
+        }
+        });
     </script>
 </body>
 

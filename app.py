@@ -1,8 +1,8 @@
-from flask import Flask, request, render_template, jsonify, session
+from flask import Flask, request, render_template, jsonify, session, redirect, url_for
 from flask_session import Session
 from dotenv import load_dotenv
 import os
-from mistral import generate_scenario_and_insights
+from mistral import generate_scenario_and_insights, generate_scenario_comparisons, generate_debate, generate_justification
 import json
 
 load_dotenv()
@@ -42,36 +42,48 @@ def get_prompt():
 
 @app.route("/insights")
 def insights():
-    prompt = session.get('prompt', '')
-    insights = generate_scenario_and_insights(prompt[5:])
     try:
-        print(insights)
+        prompt = session.get('prompt', '')
+        insights = generate_scenario_and_insights(prompt)
         insights_json = json.loads(insights)
-        print(insights_json)
-    except json.JSONDecodeError:
-        insights_json = {"error": "Invalid JSON response from AI"}
+    except Exception as e:
+        return redirect(url_for('error', error_message=str(e)))
     return render_template("insights.html", insights=insights_json)
 
 @app.route("/scenarios")
 def scenarios():
-    return render_template("scenarios.html")
+    try:
+        prompt = session.get('prompt', '')
+        scenarios = generate_scenario_comparisons(prompt)
+        scenarios_json = json.loads(scenarios)
+    except Exception as e:
+        return redirect(url_for('error', error_message=str(e)))
+    return render_template("scenarios.html", scenarios=scenarios_json)
 
 @app.route("/debate")
 def debate():
-    return render_template("debate.html")
+    try:
+        prompt = session.get('prompt', '')
+        debate = generate_debate(prompt)
+        debate_json = json.loads(debate)
+    except Exception as e:
+        return redirect(url_for('error', error_message=str(e)))
+    return render_template("debate.html", debate=debate_json)
 
 @app.route("/justification")
 def justification():
-    prompt = session.get('prompt', '')
-    justification = generate_scenario_and_insights(prompt)
-
     try:
+        prompt = session.get('prompt', '')
+        justification = generate_justification(prompt)
         justification_json = json.loads(justification)
-    except json.JSONDecodeError:
-        justification_json = {"error": "Invalid JSON response from AI"}
-
+    except Exception as e:
+        return redirect(url_for('error', error_message=str(e)))
     return render_template("justification.html", justification=justification_json)
 
+@app.route("/error")
+def error():
+    error_message = request.args.get('error_message', 'An unknown error occurred.')
+    return render_template("error.html", error_message=error_message)
 
 if __name__ == "__main__":
     app.run(debug=True)
