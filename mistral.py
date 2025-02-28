@@ -18,7 +18,7 @@ def generate_response(question):
             {"role": "system", "content": "You are an ethical AI assistant."},
             {"role": "user", "content": question}
         ],
-        "max_tokens": 200
+        "max_tokens": 1000
     }
 
     response = requests.post(url, json=payload, headers=headers)
