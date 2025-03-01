@@ -64,8 +64,8 @@ def generate_scenario_and_insights(prompt):
     Example Response (JSON format):  
     {{
         "summary": "AI-driven grading offers efficiency and consistency, but fairness concerns remain. While automation reduces human bias and speeds up the process, it may not account for subjectivity in assessments. Some argue that AI ensures standardized grading, but others worry about over-reliance on algorithms. Ethical considerations include fairness, accountability, and the need for human oversight. Schools implementing AI grading should establish clear guidelines and regularly audit results. A balanced approach integrating AI with human review may be the best path forward.",
-        "scenario": "AI for employee productivity monitoring.",
-            "key_actors": [
+        "scenario": "AI for employee productivity monitoring is the scenario where artificial intelligence is used to track and evaluate employee performance. This approach aims to enhance productivity and resource allocation by providing data-driven insights. However, it raises concerns about privacy, employee stress, and the potential misuse of data. The debate centers around whether the benefits of AI monitoring outweigh the potential drawbacks and ethical implications.",
+        "key_actors": [
                 {{"name": "Employees", "role": "Monitored for productivity"}},
                 {{"name": "Management", "role": "Oversee productivity"}},
                 {{"name": "AI Developers", "role": "Develop monitoring tools"}}
@@ -117,7 +117,7 @@ def generate_scenario_comparisons(prompt):
     Example Response (JSON format):  
     [
         {{
-            "scenario": "AI-driven exam grading.",
+            "scenario": "AI-driven exam grading is the scenario where artificial intelligence is used to evaluate and score student exams. This approach aims to enhance efficiency and consistency in grading by automating the process. However, it raises concerns about fairness, bias, and the ability to accurately assess subjective responses. The debate centers around whether the benefits of AI grading outweigh the potential drawbacks and ethical implications.",
             "key_actors": [
                 {{"name": "Students", "role": "Receive grades"}},
                 {{"name": "Teachers", "role": "Assign grades"}},
@@ -147,7 +147,7 @@ def generate_scenario_comparisons(prompt):
             }}
         }},
         {{
-            "scenario": "AI for employee productivity monitoring.",
+            "scenario": "AI for employee productivity monitoring is the scenario where artificial intelligence is used to track and evaluate employee performance. This approach aims to enhance productivity and resource allocation by providing data-driven insights. However, it raises concerns about privacy, employee stress, and the potential misuse of data. The debate centers around whether the benefits of AI monitoring outweigh the potential drawbacks and ethical implications.",
             "key_actors": [
                 {{"name": "Employees", "role": "Monitored for productivity"}},
                 {{"name": "Management", "role": "Oversee productivity"}},
@@ -262,7 +262,7 @@ def generate_debate(prompt):
 
     Example Response (JSON format):  
     {{
-        "scenario": "AI-driven exam grading.",
+        "scenario": "AI-driven exam grading is the scenario where artificial intelligence is used to evaluate and score student exams. This approach aims to enhance efficiency and consistency in grading by automating the process. However, it raises concerns about fairness, bias, and the ability to accurately assess subjective responses. The debate centers around whether the benefits of AI grading outweigh the potential drawbacks and ethical implications.",
         "key_actors": ["Students", "Teachers", "Administrators"],
         "arguments_for": ["Faster grading", "Reduced workload", "Standardized scoring"],
         "arguments_against": ["Bias", "Lack of human judgment", "Privacy concerns"],
