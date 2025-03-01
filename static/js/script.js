@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('promptInput').value = storedPrompt;
     }
 
-    // Add click event listeners to feature cards
     document.querySelectorAll('.feature-card').forEach((card, index) => {
         card.addEventListener('click', function () {
             const imgSrc = this.querySelector('img').src;
@@ -19,16 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
             bloomEffect.style.backgroundImage = `url(${imgSrc})`;
             bloomEffect.classList.add('active');
 
-            // Add a delay before showing the spinner
             setTimeout(() => {
                 const spinner = document.getElementById('spinner');
                 spinner.style.display = 'block';
-            }, 600); // 500ms delay
+            }, 600);
 
-            // Store the image source in local storage
             localStorage.setItem('backgroundImage', imgSrc);
 
-            // Determine the target page based on the feature card index
             let targetPage = '/insights';
             if (index === 1) {
                 targetPage = '/scenarios';
@@ -38,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 targetPage = '/justification';
             }
 
-            // Navigate to the target page after the bloom effect
             setTimeout(() => {
                 window.location.href = targetPage;
             }, 1000);
@@ -73,6 +68,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    // Apply fade-in effect to the body
     document.body.classList.add('fade-in');
 });

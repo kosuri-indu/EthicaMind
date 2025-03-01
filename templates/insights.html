@@ -92,7 +92,6 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border: 2px solid #000;
-            /* Added black border */
         }
 
         .row {
@@ -106,7 +105,7 @@
 
 <body>
     <div class="back-icon" onclick="window.location.href='/'">
-        &#8592; <!-- Left arrow icon -->
+        &#8592; 
     </div>
     <div class="container text-center">
         <h1 class="display-4">Scenario Generation & Ethical Insights</h1>
@@ -181,10 +180,8 @@
         {% endif %}
     </div>
     <script>
-        // Apply fade-in effect to the body
         document.body.classList.add('fade-in');
 
-        // Bar chart for scores
         const ctx = document.getElementById('scoreChart').getContext('2d');
         const scoreChart = new Chart(ctx, {
             type: 'bar',

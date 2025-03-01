@@ -280,7 +280,6 @@ def generate_debate(prompt):
     return generate_response(structured_prompt)
 
 def generate_chat_response(message, chat_history):
-    # Format chat history for the prompt
     formatted_chat_history = "\n".join([f"{entry['role']}: {entry['content']}" for entry in chat_history])
     
     structured_prompt = f"""
