@@ -217,7 +217,7 @@ def generate_justification(prompt):
     Example Response (JSON format):  
     {{
         "summary": "AI-driven grading offers speed and consistency but raises concerns about fairness and bias. While automation enhances efficiency and reduces human workload, it may not fully capture the nuances of subjective answers. Ethical considerations include transparency, accountability, and fairness in evaluation. Institutions should implement oversight measures to mitigate risks. A hybrid approach, integrating AI with human assessment, could offer the best balance.",
-        "justification": "AI grading ensures faster, fairer assessments but requires human oversight to prevent biases.",
+        "justification": "AI grading ensures faster, fairer assessments but requires human oversight to prevent biases. By leveraging AI, educational institutions can streamline the grading process, reduce human error, and provide timely feedback to students. However, it is crucial to maintain human involvement to address subjective elements and ensure fairness.",
         "pros": ["Efficiency", "Standardization", "Scalability", "Reduced workload"],
         "cons": ["Bias in training data", "Lack of subjective assessment", "privacy concerns", "Over-reliance on automation"],
         "counterarguments": [
