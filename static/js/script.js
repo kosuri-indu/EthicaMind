@@ -19,6 +19,12 @@ document.addEventListener('DOMContentLoaded', function () {
             bloomEffect.style.backgroundImage = `url(${imgSrc})`;
             bloomEffect.classList.add('active');
 
+            // Add a delay before showing the spinner
+            setTimeout(() => {
+                const spinner = document.getElementById('spinner');
+                spinner.style.display = 'block';
+            }, 1000); // 500ms delay
+
             // Store the image source in local storage
             localStorage.setItem('backgroundImage', imgSrc);
 
