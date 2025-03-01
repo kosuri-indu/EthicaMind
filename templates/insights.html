@@ -116,8 +116,8 @@
         </div>
         {% else %}
         <div class="row">
-            <div class="col-md-6">
-                <div class="section">
+            <div class="col-md-6 d-flex flex-column">
+                <div class="section flex-grow-1">
                     <h2>Scenario Generation</h2>
                     <div class="insight-content">
                         <p><strong>Scenario:</strong></p>
@@ -125,18 +125,18 @@
                     </div>
                 </div>
 
-                <div class="section">
+                <div class="section flex-grow-1">
                     <h2>Key Actors</h2>
                     <div class="insight-content">
                         <ul>
                             {% for actor in insights.key_actors %}
-                            <li>{{ actor }}</li>
+                            <li>{{ actor.name }} - {{ actor.role }}</li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
 
-                <div class="section">
+                <div class="section flex-grow-1">
                     <h2>Risks</h2>
                     <div class="insight-content">
                         <ul>
@@ -148,8 +148,8 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="section">
+            <div class="col-md-6 d-flex flex-column">
+                <div class="section flex-grow-1">
                     <h2>Benefits</h2>
                     <div class="insight-content">
                         <ul>
@@ -160,7 +160,7 @@
                     </div>
                 </div>
 
-                <div class="section">
+                <div class="section flex-grow-1">
                     <h2>Ethical Perspectives</h2>
                     <div class="insight-content">
                         <p><strong>Utilitarianism:</strong> {{ insights.ethical_perspectives.utilitarianism.analysis }}
@@ -170,7 +170,6 @@
                         </p>
                     </div>
                 </div>
-
             </div>
         </div>
 

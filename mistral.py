@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 
@@ -25,7 +26,11 @@ def generate_response(question):
     
     if response.status_code == 200:
         try:
-            return response.json().get("choices", [{}])[0].get("message", {}).get("content", "No response generated.")
+            response_json = response.json()
+            if "choices" in response_json and len(response_json["choices"]) > 0:
+                return response_json["choices"][0]["message"]["content"]
+            else:
+                return "No response generated."
         except ValueError:
             return "Error: Invalid JSON response"
     
@@ -53,174 +58,25 @@ def generate_scenario_and_insights(prompt):
        - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
        - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
 
-    5. Justification & Counterarguments:
-       - Provide a core ethical justification supporting the issue.
-       - Present at least three strong counterarguments against the issue.
-       - Use real-world examples, logical reasoning, and ethical principles.
-
-    6. **Generate a Detailed Summary**:
-       - Provide a longer, more in-depth summary (4-6 sentences).
-       - Clearly explain the dilemma, its significance, and key ethical takeaways.
-
-    7. Balanced Conclusion:
-       - Weigh both sides and provide a fair, reasoned conclusion.
-
     Example Prompt:  
     Should AI be used for grading exams?
 
     Example Response (JSON format):  
     {{
         "summary": "AI-driven grading offers efficiency and consistency, but fairness concerns remain. While automation reduces human bias and speeds up the process, it may not account for subjectivity in assessments. Some argue that AI ensures standardized grading, but others worry about over-reliance on algorithms. Ethical considerations include fairness, accountability, and the need for human oversight. Schools implementing AI grading should establish clear guidelines and regularly audit results. A balanced approach integrating AI with human review may be the best path forward.",
-        "scenario": "AI-driven exam grading.",
-        "key_actors": ["Students", "Teachers", "Administrators"],
-        "risks": ["Bias", "Lack of human judgment", "Privacy concerns"],
-        "benefits": ["Faster grading", "Reduced workload", "Standardized scoring"],
-        "ethical_perspectives": {{
-            "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
-            "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
-            "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
-        }},
-        "justification": "AI in grading ensures faster and fairer assessments but may lack human oversight.",
-        "pros": ["Efficiency", "Standardization", "Scalability"],
-        "cons": ["Bias in training data", "Lack of subjective assessment"],
-        "counterarguments": [
-            "AI may reinforce biases in historical data.",
-            "It lacks human intuition for subjective answers.",
-            "Over-reliance may devalue teachers' roles."
-        ],
-        "conclusion": "AI can assist grading, but human oversight is necessary to ensure fairness."
-    }}
-
-    Prompt: 
-    {prompt}
-    """
-    
-    return generate_response(structured_prompt)
-
-def generate_scenario_comparisons(prompt):
-    structured_prompt = f"""
-    Scenario Comparison Mode - Compare multiple ethical choices side-by-side to see the best approach.
-
-    AI must construct multiple structured ethical dilemmas and analyze them based on the given prompt.
-
-    ### Instructions:
-    Generate 6 different scenarios based on the prompt. For each scenario, provide the following details in JSON format:
-    1. Describe the Ethical Dilemma:
-       - Provide a detailed background.
-       - Explain the conflicting viewpoints.
-
-    2. Identify the Key Actors:
-       - List all the major stakeholders.
-
-    3. Analyze the Potential Risks and Benefits:
-       - Clearly differentiate risks from benefits.
-
-    4. Evaluate Using Ethical Theories:
-       - Utilitarianism: Does this decision maximize overall happiness? Provide a score (0-10).
-       - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
-       - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
-
-    Example Prompt:  
-    Should AI be used for grading exams?
-
-    Example Response (JSON format):  
-        {{
-            "scenario": "AI-driven exam grading.",
-            "key_actors": ["Students", "Teachers", "Administrators"],
-            "risks": ["Bias", "Lack of human judgment", "Privacy concerns"],
-            "benefits": ["Faster grading", "Reduced workload", "Standardized scoring"],
+        "scenario": "AI for employee productivity monitoring.",
+            "key_actors": [
+                {{"name": "Employees", "role": "Monitored for productivity"}},
+                {{"name": "Management", "role": "Oversee productivity"}},
+                {{"name": "AI Developers", "role": "Develop monitoring tools"}}
+            ],
+            "risks": ["Privacy invasion", "Employee stress", "Potential misuse of data"],
+            "benefits": ["Increased productivity", "Better resource allocation", "Data-driven decision making"],
             "ethical_perspectives": {{
-                "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
-                "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
-                "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
+                "utilitarianism": {{"analysis": "Focuses on productivity, potential stress.", "score": 6}},
+                "deontology": {{"analysis": "Privacy concerns, duty to respect rights.", "score": 5}},
+                "virtue_ethics": {{"analysis": "Balance between productivity and well-being.", "score": 7}}
             }}
-        }},
-
-    Prompt: 
-    {prompt}
-    """
-    
-    return generate_response(structured_prompt)
-
-def generate_debate(prompt):
-    structured_prompt = f"""
-    Ethical Debate Generation
-
-    AI must construct a structured ethical debate based on the given prompt.
-
-    ### Instructions:
-    1. Describe the Ethical Dilemma:
-       - Provide a detailed background.
-       - Explain the conflicting viewpoints.
-
-    2. Identify the Key Actors:
-       - List all the major stakeholders.
-
-    3. Present Arguments For and Against:
-       - Provide detailed arguments for both sides.
-
-    4. Evaluate Using Ethical Theories:
-       - Utilitarianism: Does this decision maximize overall happiness? Provide a score (0-10).
-       - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
-       - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
-
-    Example Prompt:  
-    Should AI be used for grading exams?
-
-    Example Response (JSON format):  
-    {{
-        "scenario": "AI-driven exam grading.",
-        "key_actors": ["Students", "Teachers", "Administrators"],
-        "arguments_for": ["Faster grading", "Reduced workload", "Standardized scoring"],
-        "arguments_against": ["Bias", "Lack of human judgment", "Privacy concerns"],
-        "ethical_perspectives": {{
-            "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
-            "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
-            "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
-        }}
-    }}
-
-    Prompt: 
-    {prompt}
-    """
-    
-    return generate_response(structured_prompt)
-
-def generate_justification(prompt):
-    structured_prompt = f"""
-    Ethical Justification Generation
-
-    AI must construct a structured ethical justification based on the given prompt.
-
-    ### Instructions:
-    1. Describe the Ethical Dilemma:
-       - Provide a detailed background.
-       - Explain the conflicting viewpoints.
-
-    2. Identify the Key Actors:
-       - List all the major stakeholders.
-
-    3. Provide a Justification for the Decision:
-       - Provide a detailed justification for the decision.
-
-    4. Evaluate Using Ethical Theories:
-       - Utilitarianism: Does this decision maximize overall happiness? Provide a score (0-10).
-       - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
-       - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
-
-    Example Prompt:  
-    Should AI be used for grading exams?
-
-    Example Response (JSON format):  
-    {{
-        "scenario": "AI-driven exam grading.",
-        "key_actors": ["Students", "Teachers", "Administrators"],
-        "justification": "AI-driven grading maximizes efficiency and reduces teacher workload, but potential bias must be addressed.",
-        "ethical_perspectives": {{
-            "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
-            "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
-            "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
-        }}
     }}
 
     Prompt: 
@@ -233,16 +89,16 @@ def generate_scenario_comparisons(prompt):
     structured_prompt = f"""
     Scenario Comparison Mode - Compare multiple ethical choices side-by-side to see the best approach.
 
-    AI must construct multiple structured ethical dilemmas and analyze them based on the given prompt.
+    AI must construct exactly 6 structured ethical dilemmas and analyze them based on the given prompt.
 
     ### Instructions:
-    Generate 6 different scenarios based on the prompt. For each scenario, provide the following details in JSON format:
+    Generate exactly 6 different scenarios based on the prompt. For each scenario, provide the following details in JSON format:
     1. Describe the Ethical Dilemma:
        - Provide a detailed background.
        - Explain the conflicting viewpoints.
 
     2. Identify the Key Actors:
-       - List all the major stakeholders.
+       - List all the major stakeholders and their roles.
 
     3. Analyze the Potential Risks and Benefits:
        - Clearly differentiate risks from benefits.
@@ -251,6 +107,9 @@ def generate_scenario_comparisons(prompt):
        - Utilitarianism: Does this decision maximize overall happiness? Provide a score (0-10).
        - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
        - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
+
+    5. Visualize the Decision-Making Process:
+       - Create a decision tree for each scenario to illustrate the decision-making process with if-else conditions.
 
     Example Prompt:  
     Should AI be used for grading exams?
@@ -259,16 +118,64 @@ def generate_scenario_comparisons(prompt):
     [
         {{
             "scenario": "AI-driven exam grading.",
-            "key_actors": ["Students", "Teachers", "Administrators"],
+            "key_actors": [
+                {{"name": "Students", "role": "Receive grades"}},
+                {{"name": "Teachers", "role": "Assign grades"}},
+                {{"name": "Administrators", "role": "Oversee grading process"}}
+            ],
             "risks": ["Bias", "Lack of human judgment", "Privacy concerns"],
             "benefits": ["Faster grading", "Reduced workload", "Standardized scoring"],
             "ethical_perspectives": {{
                 "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
                 "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
                 "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
+            }},
+            "decision_tree": {{
+                "nodes": [
+                    {{"id": 1, "label": "Start"}},
+                    {{"id": 2, "label": "AI Grading"}},
+                    {{"id": 3, "label": "Efficiency"}},
+                    {{"id": 4, "label": "Bias"}},
+                    {{"id": 5, "label": "Fairness"}}
+                ],
+                "edges": [
+                    {{"from": 1, "to": 2}},
+                    {{"from": 2, "to": 3, "condition": "If AI grading is efficient"}},
+                    {{"from": 2, "to": 4, "condition": "If AI grading introduces bias"}},
+                    {{"from": 4, "to": 5, "condition": "If bias is addressed"}}
+                ]
             }}
         }},
-        ...
+        {{
+            "scenario": "AI for employee productivity monitoring.",
+            "key_actors": [
+                {{"name": "Employees", "role": "Monitored for productivity"}},
+                {{"name": "Management", "role": "Oversee productivity"}},
+                {{"name": "AI Developers", "role": "Develop monitoring tools"}}
+            ],
+            "risks": ["Privacy invasion", "Employee stress", "Potential misuse of data"],
+            "benefits": ["Increased productivity", "Better resource allocation", "Data-driven decision making"],
+            "ethical_perspectives": {{
+                "utilitarianism": {{"analysis": "Focuses on productivity, potential stress.", "score": 6}},
+                "deontology": {{"analysis": "Privacy concerns, duty to respect rights.", "score": 5}},
+                "virtue_ethics": {{"analysis": "Balance between productivity and well-being.", "score": 7}}
+            }},
+            "decision_tree": {{
+                "nodes": [
+                    {{"id": 1, "label": "Start"}},
+                    {{"id": 2, "label": "AI Monitoring"}},
+                    {{"id": 3, "label": "Productivity"}},
+                    {{"id": 4, "label": "Privacy"}},
+                    {{"id": 5, "label": "Well-being"}}
+                ],
+                "edges": [
+                    {{"from": 1, "to": 2}},
+                    {{"from": 2, "to": 3, "condition": "If AI monitoring increases productivity"}},
+                    {{"from": 2, "to": 4, "condition": "If AI monitoring invades privacy"}},
+                    {{"from": 4, "to": 5, "condition": "If privacy concerns are addressed"}}
+                ]
+            }}
+        }}
     ]
 
     Prompt: 
@@ -276,6 +183,57 @@ def generate_scenario_comparisons(prompt):
     """
     
     return generate_response(structured_prompt)
+
+def generate_justification(prompt):
+    structured_prompt = f"""
+    Ethical Justification Generation
+
+    AI must construct a structured ethical justification based on the given prompt.
+
+    ### Instructions:
+
+    1. Provide a Justification for the Decision:
+       - Provide a detailed justification for the decision.
+       - Clearly state why this decision is ethical.
+
+    2. Analyze Pros and Cons:
+       - List at least 3-4 pros.
+       - List at least 3-4 cons.
+
+    3. Counterarguments:
+       - Provide at least three strong counterarguments against the decision.
+
+    4. Summary of Findings:
+       - Provide a structured summary (4-6 sentences) explaining the key ethical takeaways.
+       - Ensure clarity and fairness in presenting the argument.
+
+    5. Balanced Conclusion:
+       - Provide a final reasoned conclusion weighing both sides.
+       - Offer a well-balanced perspective on the ethical decision.
+
+    Example Prompt:  
+    Should AI be used for grading exams?
+
+    Example Response (JSON format):  
+    {{
+        "summary": "AI-driven grading offers speed and consistency but raises concerns about fairness and bias. While automation enhances efficiency and reduces human workload, it may not fully capture the nuances of subjective answers. Ethical considerations include transparency, accountability, and fairness in evaluation. Institutions should implement oversight measures to mitigate risks. A hybrid approach, integrating AI with human assessment, could offer the best balance.",
+        "justification": "AI grading ensures faster, fairer assessments but requires human oversight to prevent biases.",
+        "pros": ["Efficiency", "Standardization", "Scalability", "Reduced workload"],
+        "cons": ["Bias in training data", "Lack of subjective assessment", "privacy concerns", "Over-reliance on automation"],
+        "counterarguments": [
+            "AI may reinforce biases present in historical data.",
+            "It lacks human intuition for subjective responses.",
+            "Over-reliance on AI may devalue teachers' roles in assessment."
+        ],
+        "conclusion": "While AI can improve grading efficiency, human oversight is necessary to ensure fairness and prevent biases. A hybrid model that leverages AI for objectivity while involving human review for subjective assessments would provide the most ethical and effective solution."
+    }}
+
+    Prompt:  
+    {prompt}
+    """
+
+    return generate_response(structured_prompt)
+
 
 def generate_debate(prompt):
     structured_prompt = f"""
@@ -321,45 +279,29 @@ def generate_debate(prompt):
     
     return generate_response(structured_prompt)
 
-def generate_justification(prompt):
-    structured_prompt = f"""
-    Ethical Justification Generation
-
-    AI must construct a structured ethical justification based on the given prompt.
-
-    ### Instructions:
-    1. Describe the Ethical Dilemma:
-       - Provide a detailed background.
-       - Explain the conflicting viewpoints.
-
-    2. Identify the Key Actors:
-       - List all the major stakeholders.
-
-    3. Provide a Justification for the Decision:
-       - Provide a detailed justification for the decision.
-
-    4. Evaluate Using Ethical Theories:
-       - Utilitarianism: Does this decision maximize overall happiness? Provide a score (0-10).
-       - Deontology: Does it adhere to moral duties and rules? Provide a score (0-10).
-       - Virtue Ethics: Does it promote good character and ethical behavior? Provide a score (0-10).
-
-    Example Prompt:  
-    Should AI be used for grading exams?
-
-    Example Response (JSON format):  
-    {{
-        "scenario": "AI-driven exam grading.",
-        "key_actors": ["Students", "Teachers", "Administrators"],
-        "justification": "AI-driven grading maximizes efficiency and reduces teacher workload, but potential bias must be addressed.",
-        "ethical_perspectives": {{
-            "utilitarianism": {{"analysis": "Maximizes efficiency, potential bias.", "score": 7}},
-            "deontology": {{"analysis": "Fairness, transparency.", "score": 6}},
-            "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
-        }}
-    }}
-
-    Prompt: 
-    {prompt}
-    """
+def generate_chat_response(message, chat_history):
+    # Format chat history for the prompt
+    formatted_chat_history = "\n".join([f"{entry['role']}: {entry['content']}" for entry in chat_history])
     
-    return generate_response(structured_prompt)
+    structured_prompt = f"""
+    Continue the ethical debate based on the following chat history and the new message:
+
+    Chat History:
+    {formatted_chat_history}
+
+    New Message: {message}
+
+    Respond with a concise and relevant argument or counterargument.
+    """
+    print(chat_history)
+    print(structured_prompt)
+    
+    response = generate_response(structured_prompt)
+    print(response)
+    try:
+        response_json = json.loads(response)
+        response_content = response_json["assistant"]  
+    except ValueError:
+        response_content = "Error: Invalid JSON response"
+    
+    return response_content

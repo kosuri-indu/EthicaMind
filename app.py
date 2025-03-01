@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, jsonify, session, redirect, u
 from flask_session import Session
 from dotenv import load_dotenv
 import os
-from mistral import generate_scenario_and_insights, generate_scenario_comparisons, generate_debate, generate_justification
+from mistral import generate_scenario_and_insights, generate_scenario_comparisons, generate_debate, generate_justification, generate_chat_response
 import json
 
 load_dotenv()
@@ -55,6 +55,7 @@ def scenarios():
     try:
         prompt = session.get('prompt', '')
         scenarios = generate_scenario_comparisons(prompt)
+        print(scenarios)
         scenarios_json = json.loads(scenarios)
     except Exception as e:
         return redirect(url_for('error', error_message=str(e)))
@@ -66,9 +67,21 @@ def debate():
         prompt = session.get('prompt', '')
         debate = generate_debate(prompt)
         debate_json = json.loads(debate)
+        session['chat_history'] = [{"role": "system", "content": f"This was your scenario: {debate_json['scenario']}. What do you think?"}]
     except Exception as e:
         return redirect(url_for('error', error_message=str(e)))
     return render_template("debate.html", debate=debate_json)
+
+@app.route("/debate_message", methods=["POST"])
+def debate_message():
+    data = request.get_json()
+    message = data.get("message", "")
+    chat_history = session.get('chat_history', [])
+    chat_history.append({"role": "user", "content": message})
+    response = generate_chat_response(message, chat_history)
+    chat_history.append({"role": "assistant", "content": response})
+    session['chat_history'] = chat_history
+    return jsonify({"response": response})
 
 @app.route("/justification")
 def justification():

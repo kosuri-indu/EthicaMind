@@ -91,7 +91,8 @@
 
         .comparison-table {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 40px;
+            /* Added top margin */
             color: #000;
         }
 
@@ -116,19 +117,41 @@
             background: #ffffff;
             border: 1px solid #000;
             color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border-radius: 10px;
+            /* Added border radius */
         }
 
         .card-header {
             background-color: #343a40;
             color: #ffffff;
             font-weight: bold;
+            border-top-left-radius: 10px;
+            /* Added border radius */
+            border-top-right-radius: 10px;
+            /* Added border radius */
         }
 
         .card-body {
             background-color: #ffffff;
             color: #000;
+            flex-grow: 1;
+        }
+
+        .chart-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 100%;
+            /* Ensured same width */
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -141,14 +164,19 @@
 
         <div class="row">
             {% for scenario in scenarios %}
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">
                         Scenario {{ loop.index }}
                     </div>
                     <div class="card-body">
                         <p><strong>Scenario:</strong> {{ scenario.scenario }}</p>
-                        <p><strong>Key Actors:</strong> {{ scenario.key_actors | join(', ') }}</p>
+                        <p><strong>Key Actors:</strong></p>
+                        <ul>
+                            {% for actor in scenario.key_actors %}
+                            <li>{{ actor.name }} - {{ actor.role }}</li>
+                            {% endfor %}
+                        </ul>
                         <p><strong>Risks:</strong> {{ scenario.risks | join(', ') }}</p>
                         <p><strong>Benefits:</strong> {{ scenario.benefits | join(', ') }}</p>
                     </div>
@@ -157,7 +185,17 @@
             {% endfor %}
         </div>
 
-        <div class="section">
+        <div class="row">
+            {% for scenario in scenarios %}
+            <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
+                <div class="chart-container">
+                    <canvas id="scoreChart{{ loop.index }}"></canvas>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="section mt-3">
             <h2 class="text-center">Ethical Perspectives Comparison</h2>
             <table class="comparison-table">
                 <thead>
@@ -176,33 +214,15 @@
                         {% endfor %}
                     </tr>
                     <tr>
-                        <td><strong>Utilitarianism Score</strong></td>
-                        {% for scenario in scenarios %}
-                        <td>{{ scenario.ethical_perspectives.utilitarianism.score }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
                         <td><strong>Deontology</strong></td>
                         {% for scenario in scenarios %}
                         <td>{{ scenario.ethical_perspectives.deontology.analysis }}</td>
                         {% endfor %}
                     </tr>
                     <tr>
-                        <td><strong>Deontology Score</strong></td>
-                        {% for scenario in scenarios %}
-                        <td>{{ scenario.ethical_perspectives.deontology.score }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
                         <td><strong>Virtue Ethics</strong></td>
                         {% for scenario in scenarios %}
                         <td>{{ scenario.ethical_perspectives.virtue_ethics.analysis }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <td><strong>Virtue Ethics Score</strong></td>
-                        {% for scenario in scenarios %}
-                        <td>{{ scenario.ethical_perspectives.virtue_ethics.score }}</td>
                         {% endfor %}
                     </tr>
                 </tbody>
@@ -212,6 +232,36 @@
     <script>
         // Apply fade-in effect to the body
         document.body.classList.add('fade-in');
+
+        // Generate score charts for each scenario
+        {% for scenario in scenarios %}
+        const ctx{{ loop.index }} = document.getElementById('scoreChart{{ loop.index }}').getContext('2d');
+        const scoreChart{{ loop.index }} = new Chart(ctx{{ loop.index }}, {
+            type: 'radar',
+            data: {
+                labels: ['Utilitarianism', 'Deontology', 'Virtue Ethics'],
+                datasets: [{
+                    label: 'Scores',
+                    data: [
+                        {{ scenario.ethical_perspectives.utilitarianism.score }},
+                {{ scenario.ethical_perspectives.deontology.score }},
+                        {{ scenario.ethical_perspectives.virtue_ethics.score }}
+                    ],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+                }]
+            },
+            options: {
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+        });
+        {% endfor %}
     </script>
 </body>
 
