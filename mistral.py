@@ -124,7 +124,6 @@ def generate_scenario_comparisons(prompt):
     Should AI be used for grading exams?
 
     Example Response (JSON format):  
-    [
         {{
             "scenario": "AI-driven exam grading.",
             "key_actors": ["Students", "Teachers", "Administrators"],
@@ -136,8 +135,6 @@ def generate_scenario_comparisons(prompt):
                 "virtue_ethics": {{"analysis": "Fairness, empathy.", "score": 8}}
             }}
         }},
-        ...
-    ]
 
     Prompt: 
     {prompt}
