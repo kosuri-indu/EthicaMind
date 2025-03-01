@@ -1,4 +1,4 @@
-# EthicaMind: Ethical Decision Making Hub
+# EthicaMind: AI Powered Ethical Decision Making Simulations using MistralAI
 
 Welcome to EthicaMind, where we empower individuals and organizations to make informed and ethical decisions using AI-driven insights. Our mission is to provide a platform that facilitates ethical decision-making through structured scenarios, debates, and justifications.
 
