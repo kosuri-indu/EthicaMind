@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 const spinner = document.getElementById('spinner');
                 spinner.style.display = 'block';
-            }, 1000); // 500ms delay
+            }, 600); // 500ms delay
 
             // Store the image source in local storage
             localStorage.setItem('backgroundImage', imgSrc);
